@@ -1,7 +1,7 @@
 #
 # Calc Density function time evolution
 #
-def pd(p,E,J,gamma):
+def td_densitymatrix(p,E,J,gamma):
     import numpy as np
 
     # Find size of density matrix p
@@ -15,20 +15,23 @@ def pd(p,E,J,gamma):
     a = np.shape(gamma)
     gc = gamma
     gamma = np.zeros((N,1))
+    Gamma = 0
     for i in range(a[0]):
         Gamma = Gamma + gc[i]
         gamma[i] = gc[i]
 
     # Init Density matrix time derivative
-    pd = np.zeros((N,N))
+    pd = np.zeros((N,N), dtype=complex)
 
     # Populate Coherent part of Desity matrix time derivative
+    z = complex(0,1)
+
     for i in range(N):
         pd[i][i] = E # Diagonal
 
-        if i < N:
-            pd[i][i+1] = -1j*J*(p[j][j]-p[i][i]) # Off diagonal
-            pd[i+1][i] = 1j*J*(p[j][j]-p[i][i]) # Symmetric
+        if i < N-1:
+            pd[i][i+1] = -z*J*(p[i+1][i+1]-p[i][i]) # Off diagonal
+            pd[i+1][i] = z*J*(p[i+1][i+1]-p[i][i]) # Anti-Symmetric
 
     # Populate Incoherent part of Density matrix time derivative
     # Diagonal part
@@ -42,4 +45,7 @@ def pd(p,E,J,gamma):
             if i == j:
                 continue
             g = gamma[abs(i-j)]
-            pd[i][j] = pd[i][j] - 2*(Gamma*p[i][j]-g.conj()]p[j][i])
+            pd[i][j] = pd[i][j] - 2*(Gamma*p[i][j]-g.conj()*p[j][i])
+
+    print(pd)
+    return pd
