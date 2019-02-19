@@ -1,5 +1,10 @@
 import numpy as np
 
-p = np.zeros((4,4),dtype=complex)
+N = 5
+E = 0
+diag = [1]*(N-1)
+print(diag)
 
-print(p)
+J = np.diag(diag,k=1)+np.diag(diag,k=-1)
+
+print(J)

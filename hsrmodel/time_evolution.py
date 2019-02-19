@@ -1,12 +1,8 @@
 #
 # Calc Density function time evolution
 #
-def td_densitymatrix(p,E,J,gamma):
+def td_densitymatrix(N,p,E,J,gamma):
     import numpy as np
-
-    # Find size of density matrix p
-    b = np.shape(p)
-    N = b[0]
 
     # gamma is a vector in general, Gamma is the sum over its components
     # Also we assume gamma is symmetric, gamma(n)=gamma(-n). So we only concern
@@ -14,38 +10,32 @@ def td_densitymatrix(p,E,J,gamma):
 
     a = np.shape(gamma)
     gc = gamma
-    gamma = np.zeros((N,1))
+    gamma = np.zeros((N,1),dtype = complex)
     Gamma = 0
     for i in range(a[0]):
         Gamma = Gamma + gc[i]
         gamma[i] = gc[i]
 
-    # Init Density matrix time derivative
-    pd = np.zeros((N,N), dtype=complex)
+    # Init Super Matrix
+    L = np.zeros((N**2,N**2), dtype=complex)
 
-    # Populate Coherent part of Desity matrix time derivative
-    z = complex(0,1)
+    # Populate Coherent part of L
+    for n in range(N):
+        for m in range(N):
+            idx1 = fidx(n,m,N)
+            for q in range(N):
+                idx2 = fidx(q,m,N)
+                L[idx1][idx2] = L[idx1][idx2] +1j*J[abs(n-q)]
+                idx2 = fidx(n,q,N)
+                L[idx1][idx2] = L[idx1][idx2] -1j*J[abs(q-m)]
 
-    for i in range(N):
-        pd[i][i] = E # Diagonal
+    # Then the Incoherent part of L
 
-        if i < N-1:
-            pd[i][i+1] = -z*J*(p[i+1][i+1]-p[i][i]) # Off diagonal
-            pd[i+1][i] = z*J*(p[i+1][i+1]-p[i][i]) # Anti-Symmetric
+    return L
 
-    # Populate Incoherent part of Density matrix time derivative
-    # Diagonal part
-    for i in range(N):
-        for j in range(N):
-            pd[i][i] = pd[i][i] - 2*gamma[abs(i-j)]*(p[i][i]-p[j][j])
+def fidx(n,m,N):
+    import numpy as np
 
-    # Off diagonal part
-    for i in range(N):
-        for j in range(N):
-            if i == j:
-                continue
-            g = gamma[abs(i-j)]
-            pd[i][j] = pd[i][j] - 2*(Gamma*p[i][j]-g.conj()*p[j][i])
+    index = n*N+m
 
-    print(pd)
-    return pd
+    return index
