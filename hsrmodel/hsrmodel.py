@@ -9,16 +9,17 @@ def hsrmodel():
     # Variables
     N = 2
     E = 0
-    dt = 0.001
+    dt = 0.1
 
     J = np.zeros((N,1),dtype=complex)
     J[0] = 0
-    J[1] = 1j
+    J[1] = 0.5
 
     gamma = np.zeros((1,1),dtype=complex)
-    gamma[0][0] = 1
+    gamma[0][0] = 0
 
-    maxtime = 10000
+    maxtime = 100
+
     Data = np.zeros((maxtime,2), dtype=complex)
     # Create initial density matrix
     # Create Frenkel at n=1
@@ -28,26 +29,29 @@ def hsrmodel():
     #print(p)
     # Loop over time
 
-    L = td_densitymatrix(N,p,E,J,gamma)
-    v,w = np.linalg.eig(L)
+    L = td_densitymatrix(N,E,J,gamma)
+    print('------------------------------')
+    print(L)
+    print('------------------------------')
+    v,w = np.linalg.eigh(L)
     alpha = np.zeros((N**2,1),dtype=complex)
 
     for n in range(N**2):
         alpha[n] = w[n][0]
 
     Data = np.zeros((maxtime,N**2),dtype=complex)
-    p1 = np.zeros((maxtime,1),dtype=complex)
-    p2 = p1
-    for n in range(maxtime):
+    p1 = np.zeros((maxtime,1))
+    p2 = np.zeros((maxtime,1))
+
+    for t in range(maxtime):
         for m in range(N**2):
-            Data[n][:] = Data[n][:] + np.multiply(alpha[m],np.transpose(np.exp(-1j*v[m]*dt*n)*w[:][m]))
-            p1[n] = Data[n][0]
-            p2[n] = Data[n][3]
+            Data[t][:] = Data[t][:] + np.multiply(alpha[m],np.transpose(np.multiply(np.exp(-1j*v[m]*dt*t),w[:][m])))
 
-    #plt.plot(abs(p1))
-    plt.plot(abs(p2))
+    timeaxis = np.linspace(0,dt*(maxtime-1),maxtime)
+
+    plt.plot(timeaxis,Data[:,0])
+    plt.plot(timeaxis,Data[:,3])
     plt.show()
-
 
 def timestep(N,p,pd):
     import numpy as np

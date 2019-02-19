@@ -1,7 +1,7 @@
 #
 # Calc Density function time evolution
 #
-def td_densitymatrix(N,p,E,J,gamma):
+def td_densitymatrix(N,E,J,gamma):
     import numpy as np
 
     # gamma is a vector in general, Gamma is the sum over its components
@@ -25,9 +25,9 @@ def td_densitymatrix(N,p,E,J,gamma):
             idx1 = fidx(n,m,N)
             for q in range(N):
                 idx2 = fidx(q,m,N)
-                L[idx1][idx2] = L[idx1][idx2] +1j*J[abs(n-q)]
+                L[idx1][idx2] = L[idx1][idx2] -1j*J[abs(n-q)]
                 idx2 = fidx(n,q,N)
-                L[idx1][idx2] = L[idx1][idx2] -1j*J[abs(q-m)]
+                L[idx1][idx2] = L[idx1][idx2] +1j*J[abs(q-m)]
 
     # Then the Incoherent part of L
 
