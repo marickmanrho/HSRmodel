@@ -17,7 +17,7 @@ for n in range(N):
         idx1 = fidx(n,m,N)
         for q in range(N):
             idx2 = fidx(q,m,N)
-            L[idx1][idx2] = L[idx1][idx2] +1j*J[abs(n-q)]
+            L[idx1][idx2] = L[idx1][idx2] -1j*J[abs(n-q)]
             idx2 = fidx(n,q,N)
-            L[idx1][idx2] = L[idx1][idx2] -1j*J[abs(q-m)]
+            L[idx1][idx2] = L[idx1][idx2] +1j*J[abs(q-m)]
 ```

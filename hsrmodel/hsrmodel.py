@@ -3,65 +3,72 @@
 #
 def hsrmodel():
     import numpy as np
+    import scipy.linalg as la
     from time_evolution import td_densitymatrix
-    import matplotlib.pyplot as plt
+    from plotdynamics import plotdynamics
+    from verbose import verbose
 
     # Variables
-    N = 2
-    E = 0
-    dt = 0.1
+    # --------------------
+    N = 2               # Number of molecules
+    E = 0               # Energy of Frenkel exciton
+    dt = 1              # Timestep
+    maxtime = 100000      # Number of timesteps
 
-    J = np.zeros((N,1),dtype=complex)
+    # Coulomb coupling
+    J = np.zeros((N+1,1),dtype=complex)
     J[0] = 0
-    J[1] = 0.5
+    J[1] = 0.0005
 
-    gamma = np.zeros((1,1),dtype=complex)
-    gamma[0][0] = 0
+    # Gamma
+    gamma = np.zeros((N,1),dtype=complex)
+    gamma[0] = 0.0001
+    gamma[1] = 0.0
+    gammabar = np.zeros((N,1),dtype=complex)
+    # --------------------
 
-    maxtime = 100
+    # Generate super density matrix time evolution operator
+    L = td_densitymatrix(N,E,J,gamma,gammabar)
 
-    Data = np.zeros((maxtime,2), dtype=complex)
-    # Create initial density matrix
-    # Create Frenkel at n=1
+    # Diagonalize L
+    w,v = la.eig(L)
 
-    p = np.zeros((N**2,1),dtype = complex)
-    p[0] = 1
-    #print(p)
-    # Loop over time
+    # Make sure v is normalized
+    norm = np.zeros((N**2,1))
+    for n in range(N**2):
+        for m in range(N**2):
+            norm[n] = norm[n] + np.abs(v[m,n]*np.conj(v[m,n]))
+        v[:,n] = v[:,n]/np.sqrt(norm[n])
 
-    L = td_densitymatrix(N,E,J,gamma)
-    print('------------------------------')
-    print(L)
-    print('------------------------------')
-    v,w = np.linalg.eigh(L)
-    alpha = np.zeros((N**2,1),dtype=complex)
+    # Find weights based on initial condition p(t=0) = |1>
+    alpha = v[0,:]
+
+    # Check initial condition
+    Init = np.zeros((N**2,1),dtype=complex)
 
     for n in range(N**2):
-        alpha[n] = w[n][0]
+        Init[:,0] = Init[:,0] + alpha[n]*v[:,n]
 
-    Data = np.zeros((maxtime,N**2),dtype=complex)
-    p1 = np.zeros((maxtime,1))
-    p2 = np.zeros((maxtime,1))
+    # Write if N<3
+    verbose(N,L,w,v,alpha,Init)
 
+    # Setup super density matrix
+    p = np.zeros((maxtime,N**2),dtype=complex)
+    pe = np.zeros((maxtime,N**2)) # Stores expectation value
+
+    # Calculate dynamics based on eigenvalues and vectors
     for t in range(maxtime):
         for m in range(N**2):
-            Data[t][:] = Data[t][:] + np.multiply(alpha[m],np.transpose(np.multiply(np.exp(-1j*v[m]*dt*t),w[:][m])))
+            fact = alpha[m]*np.exp(w[m]*dt*t)
+            p[t,:] = p[t,:] + np.transpose(np.multiply(fact,v[:,m]))
+        for m in range(N**2):
+            pe[t,m] = np.sqrt(p[t,m].real**2 + p[t,m].imag**2)
 
-    timeaxis = np.linspace(0,dt*(maxtime-1),maxtime)
-
-    plt.plot(timeaxis,Data[:,0])
-    plt.plot(timeaxis,Data[:,3])
-    plt.show()
-
-def timestep(N,p,pd):
-    import numpy as np
-    dt = 1
-    count = 0
+    # Take trace
+    pop = np.zeros((maxtime,N))
     for n in range(N):
-        for m in range(N):
-            p[count] = p[count] + dt*pd[n][m]
-            count = count + 1
+        pop[:,n] = pe[:,n*N+n]
 
-    return p
+    plotdynamics(N,dt,maxtime,pop)
 
 hsrmodel()
