@@ -3,6 +3,7 @@
 #
 def hsrmodel():
     import numpy as np
+    import scipy.linalg.lapack as lapack
     import scipy.linalg as la
     from time_evolution import td_densitymatrix
     from plotdynamics import plotdynamics
@@ -10,19 +11,19 @@ def hsrmodel():
 
     # Variables
     # --------------------
-    N = 2               # Number of molecules
+    N = 2              # Number of molecules
     E = 0               # Energy of Frenkel exciton
-    dt = 1              # Timestep
-    maxtime = 100000      # Number of timesteps
-
+    timesteps = 1000        #
+    maxtime = 1000        # Number of timesteps
+    dt = maxtime/timesteps  # Time interval
     # Coulomb coupling
     J = np.zeros((N+1,1),dtype=complex)
     J[0] = 0
-    J[1] = 0.0005
+    J[1] = -0.01
 
     # Gamma
     gamma = np.zeros((N,1),dtype=complex)
-    gamma[0] = 0.0001
+    gamma[0] = 0.0
     gamma[1] = 0.0
     gammabar = np.zeros((N,1),dtype=complex)
     # --------------------
@@ -31,8 +32,11 @@ def hsrmodel():
     L = td_densitymatrix(N,E,J,gamma,gammabar)
 
     # Diagonalize L
+    #Lw = lapack.flapack.zgeev(np.asfortranarray(L,dtype='cfloat'))
+    #w = Lw[0]
+    #v = Lw[2]
     w,v = la.eig(L)
-
+    #w = -1j*w
     # Make sure v is normalized
     norm = np.zeros((N**2,1))
     for n in range(N**2):

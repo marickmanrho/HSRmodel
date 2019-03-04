@@ -26,7 +26,7 @@ def td_densitymatrix(N,E,J,gamma,gammabar):
                 idx2 = fidx(q,m,N)
                 L[idx1,idx2] = L[idx1,idx2] - 1j*J[abs(n-q)]
                 idx2 = fidx(n,q,N)
-                L[idx1,idx2] = L[idx1,idx2] + 1j*J[abs(q-m)]
+                L[idx1,idx2] = L[idx1,idx2] - 1j*J[abs(q-m)]
 
     # Then the Incoherent part of L
     # Diagonal part
