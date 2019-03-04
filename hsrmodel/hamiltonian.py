@@ -1,4 +1,4 @@
-def hamiltonian(N,E,J):
+def get_hamiltonian(N,E,J):
     import numpy as np
 
     # Make sure E and J are vectors of length N
