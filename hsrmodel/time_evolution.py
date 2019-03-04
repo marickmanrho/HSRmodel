@@ -1,56 +1,93 @@
 #
-# Calc Density function time evolution
+#                               time_evolution.py
 #
-def td_densitymatrix(N,E,J,gamma,gammabar):
+# This file contains two main functions td_superoperator and td_hamiltonian.
+# These functions correspond to two different ways of calculating the time
+# dynamics of the system.
+# See README.md in the main project folder for more details.
+#
+#-------------------------------------------------------------------------------
+
+def td_superoperator(N,E,J,gamma,gammabar,maxtime,dt):
     import numpy as np
+    import scipy.linalg.lapack as lapack
+    import scipy.linalg as la
+    from superoperator import get_superoperator
+    from verbose import verbose
 
-    # gamma is a vector in general, Gamma is the sum over its components
-    # Also we assume gamma is symmetric, gamma(n)=gamma(-n). So we only concern
-    # ourselves with positive gamma. We make sure gamma has shape (Nx1)
+    # Generate super density matrix time evolution operator
+    L = get_superoperator(N,E,J,gamma,gammabar)
 
-    a = np.shape(gamma)
-    gc = gamma
-    gamma = np.zeros((N,1),dtype = complex)
-    Gamma = 0
-    for i in range(a[0]):
-        Gamma = Gamma + gc[i]
-        gamma[i] = gc[i]
-    # Init Super Matrix
-    L = np.zeros((N**2,N**2), dtype=complex)
+    # Diagonalize L
+    #Lw = lapack.flapack.zgeev(np.asfortranarray(L,dtype='cfloat'))
+    #w = Lw[0]
+    #v = Lw[2]
+    w,v = la.eig(L)
+    #w = -1j*w
+    # Make sure v is normalized
+    norm = np.zeros((N**2,1))
+    for n in range(N**2):
+        for m in range(N**2):
+            norm[n] = norm[n] + np.abs(v[m,n]*np.conj(v[m,n]))
+        v[:,n] = v[:,n]/np.sqrt(norm[n])
 
-    # Populate Coherent part of L
+    # Find weights based on initial condition p(t=0) = |1>
+    alpha = v[0,:]
+
+    # Check initial condition
+    Init = np.zeros((N**2,1),dtype=complex)
+
+    for n in range(N**2):
+        Init[:,0] = Init[:,0] + alpha[n]*v[:,n]
+
+    # Write if N<3
+    verbose(N,L,w,v,alpha,Init)
+
+    # Setup super density matrix
+    p = np.zeros((maxtime,N**2),dtype=complex)
+    pe = np.zeros((maxtime,N**2)) # Stores expectation value
+
+    # Calculate dynamics based on eigenvalues and vectors
+    for t in range(maxtime):
+        for m in range(N**2):
+            fact = alpha[m]*np.exp(w[m]*dt*t)
+            p[t,:] = p[t,:] + np.transpose(np.multiply(fact,v[:,m]))
+        for m in range(N**2):
+            pe[t,m] = np.sqrt(p[t,m].real**2 + p[t,m].imag**2)
+
+    # Take trace
+    pop = np.zeros((maxtime,N))
     for n in range(N):
-        for m in range(N):
-            idx1 = fidx(n,m,N)
-            for q in range(N):
-                idx2 = fidx(q,m,N)
-                L[idx1,idx2] = L[idx1,idx2] - 1j*J[abs(n-q)]
-                idx2 = fidx(n,q,N)
-                L[idx1,idx2] = L[idx1,idx2] - 1j*J[abs(q-m)]
+        pop[:,n] = pe[:,n*N+n]
 
-    # Then the Incoherent part of L
-    # Diagonal part
-    # This can be neglected if gamma(0) >> gamma(1)
-    for n in range(N):
-        idx1 = fidx(n,n,N)
-        for m in range(N):
-            idx2 = fidx(m,m,N)
-            L[idx1,idx1] = L[idx1,idx1] - 2*gamma[abs(n-m)]
-            L[idx1,idx2] = L[idx1,idx2] + 2*gamma[abs(n-m)]
+    return(pop)
 
-    # Off-diagonal part
-    for n in range(N):
-        for m in range(N):
-            if (n!=m):
-                idx1 = fidx(n,m,N)
-                idx2 = fidx(m,n,N)
+def td_hamiltonian(N,E,J,gamma,gammabar,timesteps,dt):
+    import numpy as np
+    from hamiltonian import get_hamiltonian
+    from densitymatrix import get_densitymatrix
+    from population import get_population
+    from liouville import get_liouvilleoperator
 
-                L[idx1,idx1] = L[idx1,idx1] - 2*Gamma
-                L[idx1,idx2] = L[idx1,idx2] + 2*np.conj(gammabar[abs(n-m)])
+    # Setup Hamiltonian and Initial conditions
+    H = get_hamiltonian(N,E,J)
+    rho = get_densitymatrix(N)
 
-    if np.allclose(L, L.T, atol=0.01) == False:
-        exit('L is not symmetric!')
-    return L
+    # Init population
+    pop = np.zeros((timesteps,N))
+
+    # Run in time
+    for t in range(timesteps):
+        # Calculate population first and normalize
+        pop[t,:] = get_population(rho)
+        norm = np.sum(pop[t,:])
+        rho = rho/norm
+
+        # Calculate rho_dot and update rho
+        rho_dot = get_liouvilleoperator(H,rho,gamma,gammabar)
+        rho = rho + rho_dot*dt
+
+    return(pop)
 
 def fidx(n,m,N):
     import numpy as np

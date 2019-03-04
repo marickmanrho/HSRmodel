@@ -1,18 +1,27 @@
 #
-# Haken Strobl Reineker Model
+#                       Haken Strobl Reineker Model
 #
+# This is the main engine of the software. Calling the hsrmodel() function will
+# create the variable input and call either the td_hamiltonian() or
+# td_superoperator() routines.
+# See README.md in the main project folder for more details.
+#
+#-------------------------------------------------------------------------------
+
 def hsrmodel():
     import numpy as np
-    import scipy.linalg.lapack as lapack
-    import scipy.linalg as la
-    from time_evolution import td_densitymatrix
+
+    # Import the functions
+    from time_evolution import td_superoperator
+    from time_evolution import td_hamiltonian
+
+    # Custom plotting function
     from plotdynamics import plotdynamics
-    from verbose import verbose
 
     # Variables
-    # --------------------
-    N = 2              # Number of molecules
-    E = 0               # Energy of Frenkel exciton
+    # --------------------------------------------------------------------------
+    N = 5               # Number of molecules
+    E = [0]               # Energy of Frenkel exciton
     timesteps = 1000        #
     maxtime = 1000        # Number of timesteps
     dt = maxtime/timesteps  # Time interval
@@ -23,56 +32,21 @@ def hsrmodel():
 
     # Gamma
     gamma = np.zeros((N,1),dtype=complex)
-    gamma[0] = 0.0
+    gamma[0] = 0.01
     gamma[1] = 0.0
     gammabar = np.zeros((N,1),dtype=complex)
-    # --------------------
+    # --------------------------------------------------------------------------
 
-    # Generate super density matrix time evolution operator
-    L = td_densitymatrix(N,E,J,gamma,gammabar)
+    # Choose which version of the code you want to use:
+    #   First option is to create a Hamiltonian and compute the Liouville -
+    #   operator. The timeseries is determined in an itterative way.
+    pop = td_hamiltonian(N,E,J,gamma,gammabar,timesteps,dt)
+    #   Second option is to compute the superoperator of the Liouville operator
+    #   and compute the timeseries using the eigenvectors and eigenvalues of the
+    #   superoperator.
+    #pop = td_superoperator(N,E,J,gamma,gammabar,maxtime,dt)
 
-    # Diagonalize L
-    #Lw = lapack.flapack.zgeev(np.asfortranarray(L,dtype='cfloat'))
-    #w = Lw[0]
-    #v = Lw[2]
-    w,v = la.eig(L)
-    #w = -1j*w
-    # Make sure v is normalized
-    norm = np.zeros((N**2,1))
-    for n in range(N**2):
-        for m in range(N**2):
-            norm[n] = norm[n] + np.abs(v[m,n]*np.conj(v[m,n]))
-        v[:,n] = v[:,n]/np.sqrt(norm[n])
-
-    # Find weights based on initial condition p(t=0) = |1>
-    alpha = v[0,:]
-
-    # Check initial condition
-    Init = np.zeros((N**2,1),dtype=complex)
-
-    for n in range(N**2):
-        Init[:,0] = Init[:,0] + alpha[n]*v[:,n]
-
-    # Write if N<3
-    verbose(N,L,w,v,alpha,Init)
-
-    # Setup super density matrix
-    p = np.zeros((maxtime,N**2),dtype=complex)
-    pe = np.zeros((maxtime,N**2)) # Stores expectation value
-
-    # Calculate dynamics based on eigenvalues and vectors
-    for t in range(maxtime):
-        for m in range(N**2):
-            fact = alpha[m]*np.exp(w[m]*dt*t)
-            p[t,:] = p[t,:] + np.transpose(np.multiply(fact,v[:,m]))
-        for m in range(N**2):
-            pe[t,m] = np.sqrt(p[t,m].real**2 + p[t,m].imag**2)
-
-    # Take trace
-    pop = np.zeros((maxtime,N))
-    for n in range(N):
-        pop[:,n] = pe[:,n*N+n]
-
-    plotdynamics(N,dt,maxtime,pop)
+    # fancier plotting
+    plotdynamics(N,dt,timesteps,pop)
 
 hsrmodel()

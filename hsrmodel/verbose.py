@@ -1,3 +1,11 @@
+#
+#                       verbose.py
+#
+# Simple function which serves to print info to the screen for the
+# td_superoperator routine.
+#
+#-------------------------------------------------------------------------------
+
 def verbose(N,L,w,v,alpha,Init):
     import numpy as np
 
