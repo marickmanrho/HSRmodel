@@ -1,3 +1,10 @@
+#
+#                           plotdynamics.py
+#
+# A function to make a ordered plot of all populations.
+#
+#-------------------------------------------------------------------------------
+
 def plotdynamics(N,dt,maxtime,pop):
     import numpy as np
     import matplotlib.pyplot as plt

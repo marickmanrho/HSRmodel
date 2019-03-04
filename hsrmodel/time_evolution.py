@@ -1,6 +1,13 @@
 #
-# Calc Density function time evolution
+#                               time_evolution.py
 #
+# This file contains two main functions td_superoperator and td_hamiltonian.
+# These functions correspond to two different ways of calculating the time
+# dynamics of the system.
+# See README.md in the main project folder for more details.
+#
+#-------------------------------------------------------------------------------
+
 def td_superoperator(N,E,J,gamma,gammabar,maxtime,dt):
     import numpy as np
     import scipy.linalg.lapack as lapack
@@ -62,16 +69,23 @@ def td_hamiltonian(N,E,J,gamma,gammabar,timesteps,dt):
     from population import get_population
     from liouville import get_liouvilleoperator
 
+    # Setup Hamiltonian and Initial conditions
     H = get_hamiltonian(N,E,J)
     rho = get_densitymatrix(N)
 
+    # Init population
     pop = np.zeros((timesteps,N))
+
+    # Run in time
     for t in range(timesteps):
+        # Calculate population first and normalize
         pop[t,:] = get_population(rho)
         norm = np.sum(pop[t,:])
         rho = rho/norm
-        L = get_liouvilleoperator(H,rho,gamma,gammabar)
-        rho = rho + L*dt
+
+        # Calculate rho_dot and update rho
+        rho_dot = get_liouvilleoperator(H,rho,gamma,gammabar)
+        rho = rho + rho_dot*dt
 
     return(pop)
 

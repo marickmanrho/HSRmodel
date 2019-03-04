@@ -1,3 +1,15 @@
+#
+#                           superoperator.py
+#
+# The superoperator is a way of calculating the Liouville equation. In the
+# superoperator approach we map the densitymatrix on a vector such that we no
+# longer need to construct a ani-commutator for our Liouville operator. The
+# Liouville operator now is a matrix of size N^2 which can be diagonalized
+# independently of the densitymatrix itself.
+# We use the eigenvectors and eigenenergies to calculate the time dynamics.
+#
+#-------------------------------------------------------------------------------
+
 def get_superoperator(N,E,J,gamma,gammabar):
     import numpy as np
 
@@ -45,6 +57,7 @@ def get_superoperator(N,E,J,gamma,gammabar):
                 L[idx1,idx1] = L[idx1,idx1] - 2*Gamma
                 L[idx1,idx2] = L[idx1,idx2] + 2*np.conj(gammabar[abs(n-m)])
 
+    # Little test to make sure L is symmetric and not Hermitian!
     if np.allclose(L, L.T, atol=0.01) == False:
         exit('L is not symmetric!')
     return L

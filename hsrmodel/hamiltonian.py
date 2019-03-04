@@ -1,3 +1,11 @@
+#
+#                           hamiltonian.py
+#
+# This function will create a general Anderson Hamiltonian.
+# For now it prints the Hamiltonian to the terminal.
+#
+#-------------------------------------------------------------------------------
+
 def get_hamiltonian(N,E,J):
     import numpy as np
 
@@ -28,10 +36,11 @@ def get_hamiltonian(N,E,J):
         Jn = np.zeros((N-n,))+J[n]
         H = H + np.diag(Jn,n) + np.diag(Jn,-n)
 
+    # Print Hamiltonian to screen
     print('Hamiltonian')
     print('-----------')
     print(H)
     return H
 
-# test case
+## test case:
 # hamiltonian(2,[1,1],[0,2])
