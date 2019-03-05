@@ -32,10 +32,12 @@ def get_superoperator(N,E,J,gamma,gammabar):
         for m in range(N):
             idx1 = fidx(n,m,N)
             for q in range(N):
+                # In Reineker, there is the condition q != m,n but J[0]=0 so we
+                # can neglect it here.
                 idx2 = fidx(q,m,N)
                 L[idx1,idx2] = L[idx1,idx2] - 1j*J[abs(n-q)]
                 idx2 = fidx(n,q,N)
-                L[idx1,idx2] = L[idx1,idx2] - 1j*J[abs(q-m)]
+                L[idx1,idx2] = L[idx1,idx2] + 1j*J[abs(q-m)]
 
     # Then the Incoherent part of L
     # Diagonal part
@@ -50,14 +52,23 @@ def get_superoperator(N,E,J,gamma,gammabar):
     # Off-diagonal part
     for n in range(N):
         for m in range(N):
-            if (n!=m):
-                idx1 = fidx(n,m,N)
-                idx2 = fidx(m,n,N)
+            if (n==m):
+                continue
+            idx1 = fidx(n,m,N)
+            idx2 = fidx(m,n,N)
 
-                L[idx1,idx1] = L[idx1,idx1] - 2*Gamma
-                L[idx1,idx2] = L[idx1,idx2] + 2*np.conj(gammabar[abs(n-m)])
+            L[idx1,idx1] = L[idx1,idx1] - 2*Gamma
+            L[idx1,idx2] = L[idx1,idx2] + 2*np.conj(gammabar[abs(n-m)])
 
     # Little test to make sure L is symmetric and not Hermitian!
     if np.allclose(L, L.T, atol=0.01) == False:
         exit('L is not symmetric!')
     return L
+
+
+def fidx(n,m,N):
+    import numpy as np
+
+    index = n*N+m
+
+    return index
