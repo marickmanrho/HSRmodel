@@ -3,9 +3,11 @@ A study of the Haken, Strobl, Reineker model.
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 
+## Usage
+Main function is `hsrmodel()` as found in `hsrmodel.py`.
 
 ## Time evolution
-First we create the coherent part based on $L_0 = H_0^x$.
+First we create the coherent part based on $$L_0 = H_0^x$$.
 
 $-i[H_0,p]_{nm} = -i\left<n\right|[H_0,p]\left|m\right>$
 
