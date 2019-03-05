@@ -9,6 +9,11 @@ Main function is `hsrmodel()` as found in `hsrmodel.py`.
 ## Time evolution
 First we create the coherent part based on $$L_0 = H_0^x$$.
 
+![equation](http://latex.codecogs.com/gif.latex?O_t%3D%5Ctext%20%7B%20Onset%20event%20at%20time%20bin%20%7D%20t)
+
+
+<img src="https://latex.codecogs.com/gif.latex?O_t=\text { Onset event at time bin } t " /> 
+
 $-i[H_0,p]_{nm} = -i\left<n\right|[H_0,p]\left|m\right>$
 
 $\qquad \qquad \quad= -i\left<n\right|\left[\left(\sum_{n'} \epsilon \left|n'\right>\left<n'\right|+\sum_{n'\neq m'} J_{n'm'}\left|n'\right>\left<m'\right|\right)\sum_{r,q} p_{rq} \left|r\right>\left<q\right|\right.$
