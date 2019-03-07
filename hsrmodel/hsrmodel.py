@@ -24,8 +24,8 @@ def hsrmodel():
     # --------------------------------------------------------------------------
     N = 20                # Number of molecules
     E = [0]               # Energy of Frenkel exciton
-    timesteps = 10000        #
-    maxtime = 1000        # Number of timesteps
+    timesteps = 40000        #
+    maxtime = 4000        # Number of timesteps
     dt = maxtime/timesteps  # Time interval
     # Coulomb coupling
     J = np.zeros((N+1,1),dtype=complex)

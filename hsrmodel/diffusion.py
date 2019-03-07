@@ -17,7 +17,7 @@ def diffusion(N,E,J,gamma,gammabar,timesteps,dt):
     for t in range(timesteps):
         # Calculate Diffusion constant
         msd = get_msd(rho)
-        D[t] = np.abs(msd)/2/(t+1)
+        D[t] = np.abs(msd)
         # Calculate rho_dot and update rho
         rho_dot = get_liouvilleoperator(H,rho,gamma,gammabar)
         rho = rho + rho_dot*dt
