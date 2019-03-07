@@ -1,0 +1,11 @@
+#
+# Parameters
+#
+
+Name = 'Default_Test'
+
+# Number of molecules
+N = 50
+
+# Maximum number of vibrations
+MaxVib = 5
