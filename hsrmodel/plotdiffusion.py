@@ -10,7 +10,7 @@ def plotdiffusion(N,dt,maxtime,D):
     ax2 = fig2.add_subplot(111)
     ax2.plot(timeaxis,D)
     ax2.set_xlabel('Time (fs)')
-    ax2.set_ylabel('Diffusion')
+    ax2.set_ylabel('RMS')
     #ax.set_zticks([0,0.2,0.4,0.6,0.8,1])
 
     #ax.set_yticks(np.linspace(0,N-1,N))

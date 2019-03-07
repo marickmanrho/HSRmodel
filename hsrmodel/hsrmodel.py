@@ -34,7 +34,7 @@ def hsrmodel():
 
     # Gamma
     gamma = np.zeros((N,1),dtype=complex)
-    gamma[0] = 0.001
+    gamma[0] = 0.0001
     gamma[1] = 0.0
     gammabar = np.zeros((N,1),dtype=complex)
     # --------------------------------------------------------------------------
