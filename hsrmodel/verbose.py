@@ -23,4 +23,4 @@ def verbose(N,L,w,v,alpha,Init):
 
     print('|Alpha|: ' + str(np.sum(alpha**2).real) + ' + ' + str(np.sum(alpha**2).imag) + 'j')
     print('---------------\n Init')
-    print(np.array_str(Init[::N+1,0], precision=3))
+    print(np.array_str(Init, precision=3))

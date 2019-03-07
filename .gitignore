@@ -1,0 +1,9 @@
+# General Python Cache
+__pycache__
+*.pyc
+
+# Test file (for intermediate testing)
+hsrmodel/test.py
+
+# Data folder
+Data/
