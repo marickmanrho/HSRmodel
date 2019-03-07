@@ -2,6 +2,9 @@ def init_folder(parms):
     import os
     import shutil
 
+    if not os.path.isdir('../Data'):
+        os.mkdir('../Data')
+
     PathDataFolder = '../Data/' + parms["Name"]
     PathCore = PathDataFolder
     n = 0
