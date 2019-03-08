@@ -19,7 +19,7 @@ def calc_size(parms):
         for m in range(0,q):
             size[n] = size[n] + prefactor*factorial(m+n)/(factorial(n)*factorial(m))
 
-    return size
+    print(size)
 
 # Simple function to calculate factorial
 def factorial(n):
@@ -28,3 +28,6 @@ def factorial(n):
         f = f*i
 
     return f
+
+parms = {"N": 50, "MaxVib": 5, "incl_nps": 2, "nps_truncation": 25}
+calc_size(parms)
