@@ -14,8 +14,21 @@ Name = 'Default_Test'
 #-----                              GENERAL                               -----#
 #------------------------------------------------------------------------------#
 
-# what would output be etc.
+# save generated Hamiltonian
 save_hamiltonian = True
+
+#------------------------------------------------------------------------------#
+#-----                             PRECISION                              -----#
+#------------------------------------------------------------------------------#
+
+# Include states
+incl_nps = 1
+
+# Maximum number of vibrations in the system
+MaxVib = 5
+
+# Truncation
+nps_truncation = 10
 
 #------------------------------------------------------------------------------#
 #-----                          MOLECULAR SYSTEM                          -----#

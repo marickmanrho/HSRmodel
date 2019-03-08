@@ -2,15 +2,15 @@ def get_hamiltonian(parms):
     import numpy as np
     import codecs, json
     import sys
-    from hamiltonian.generate_hamiltonian import generate_hamiltonian
+    from hamiltonian.gen_h import gen_h
 
-    # Determine if Hamiltonian is to be read from file or generated
+    # Determine if Hamiltonian is to be read from file
     try:
         # Itterate over all possible input files
         for n in range(1,3):
             fileinput = sys.argv[n]
 
-            # see if it is a JSON
+            # See if it is a JSON
             if fileinput[-4:]=='json':
                 filecontent = codecs.open(fileinput, 'r', encoding='utf-8').read()
                 filedict = json.loads(filecontent)
@@ -27,9 +27,7 @@ def get_hamiltonian(parms):
 
     # Or generate Hamiltonian from scratch
     except:
-
-        print('Generating new Hamiltonian')
-        H = generate_hamiltonian(parms)
+        H = gen_h(parms)
 
         # And write it to JSON
         if parms["save_hamiltonian"]:
@@ -38,6 +36,7 @@ def get_hamiltonian(parms):
             hamiltonian_dict['type'] = 'hamiltonian'
             hamiltonian_dict['data'] = H.tolist()
             with open(jsonpath, "w") as write_file:
-                json.dump(hamiltonian_dict, write_file, separators=(',', ':'), sort_keys=True, indent=4)
+                json.dump(hamiltonian_dict, write_file, separators=(',', ':'),\
+                 sort_keys=True, indent=4)
 
     return H
