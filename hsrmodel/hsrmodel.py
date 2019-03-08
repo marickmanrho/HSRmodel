@@ -8,7 +8,7 @@
 #
 #-------------------------------------------------------------------------------
 
-def hsrmodel():
+def hsrmodel(parms):
     import numpy as np
 
     # Import the functions
