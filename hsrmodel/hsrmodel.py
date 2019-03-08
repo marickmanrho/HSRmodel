@@ -56,5 +56,3 @@ def hsrmodel(parms):
     # fancier plotting
     plotdynamics(N,dt,timesteps,pop)
     plotdiffusion(N,dt,timesteps,D)
-
-hsrmodel()

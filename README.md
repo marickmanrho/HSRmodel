@@ -4,7 +4,23 @@ A study of the Haken, Strobl, Reineker model.
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 
 ## Usage
-Main function is `hsrmodel()` as found in `hsrmodel.py`.
+The program is run from the command line:
+```
+python3 ./hsrmodel/main.py parameters.txt
+```
+
+where `./hsrmodel/main.py` is the main function which reads in the parameters
+provided in `parameters.txt` and runs the calculation. The output is stored in
+`./Data/<name>`. When no `parameters.txt` file is given, the default from
+`./hsrmodel/initialization/default_parameters.txt` is used.
+
+## Input parameters
+
+|Parameter        | Description   | Value       |
+|:----------------|:--------------|:------------|
+|Name             | The name of the calculation. This will be used to name the ./Data/\<Name\> folder.        | Str   |
+|N   | Number of molecules in the system   | Int   |
+|MaxVib   | Maximum number of vibrations allowed in the system.   | Int  |
 
 ## Time evolution
 First we create the coherent part based on ![equation](https://latex.codecogs.com/gif.latex?L_0%20%3D%20H_0%5Ex).
