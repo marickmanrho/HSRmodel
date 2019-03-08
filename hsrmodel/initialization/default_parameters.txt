@@ -1,11 +1,42 @@
-#
-# Parameters
-#
+#------------------------------------------------------------------------------#
+#-----                             PARAMETERS                             -----#
+#------------------------------------------------------------------------------#
+#                                                                              #
+#             This file contains the input parameters for main.py              #
+#                                                                              #
+#==============================================================================#
 
+# Name of the calculation. This name is used to create the ./Data/<Name> folder
+# in which all output files are stored.
 Name = 'Default_Test'
+
+#------------------------------------------------------------------------------#
+#-----                              GENERAL                               -----#
+#------------------------------------------------------------------------------#
+
+# what would output be etc.
+save_hamiltonian = True
+
+#------------------------------------------------------------------------------#
+#-----                          MOLECULAR SYSTEM                          -----#
+#------------------------------------------------------------------------------#
 
 # Number of molecules
 N = 50
 
-# Maximum number of vibrations
-MaxVib = 5
+# Mean energy of Frenkel exciton
+E = 0
+
+# Coulomb coupling
+J = [[0,0]]
+
+# Gamma
+gamma = [[0,0]]
+
+#------------------------------------------------------------------------------#
+#-----                           TIME EVOLUTION                           -----#
+#------------------------------------------------------------------------------#
+
+# The size of one timestep, (dt) is calculated from maxtime/timestep
+maxtime = 4000
+timesteps = 40000

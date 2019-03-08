@@ -28,6 +28,6 @@ def initialize():
     # Write parameters JSON file
     jsonpath = parms["PathDataFolder"]+'/parameters.json'
     with open(jsonpath, "w") as write_file:
-        json.dump(parms, write_file)
+        json.dump(parms, write_file, sort_keys=True, indent=4)
 
     return parms
