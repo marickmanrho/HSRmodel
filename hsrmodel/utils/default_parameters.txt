@@ -14,6 +14,10 @@ Name = 'Default_Test'
 #-----                              GENERAL                               -----#
 #------------------------------------------------------------------------------#
 
+# Which model to use
+model = 'fluxoperator'
+hamiltonian = 'frenkel'
+
 # save generated Hamiltonian
 save_hamiltonian = True
 
@@ -35,16 +39,18 @@ nps_truncation = 10
 #------------------------------------------------------------------------------#
 
 # Number of molecules
-N = 50
+N = 3
 
-# Mean energy of Frenkel exciton
+# Mean energy of Frenkel exciton and standard deviation (diagonal disorder)
 E = 0
+Esig = 0.1
 
 # Coulomb coupling
-J = [[0,0]]
+J = [[0],[1]]
 
 # Gamma
-gamma = [[0,0]]
+gamma = [[0],[0]]
+Gamma = 0
 
 #------------------------------------------------------------------------------#
 #-----                           TIME EVOLUTION                           -----#

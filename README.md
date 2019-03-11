@@ -22,6 +22,10 @@ provided in `parameters.txt` and runs the calculation. The output is stored in
 |N   | Number of molecules in the system   | Int   |
 |MaxVib   | Maximum number of vibrations allowed in the system.   | Int  |
 
+## Fluxoperator
+### Description
+(Paper reference here)
+
 ## Time evolution
 First we create the coherent part based on ![equation](https://latex.codecogs.com/gif.latex?L_0%20%3D%20H_0%5Ex).
 

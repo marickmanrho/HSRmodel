@@ -28,6 +28,3 @@ def factorial(n):
         f = f*i
 
     return f
-
-parms = {"N": 50, "MaxVib": 5, "incl_nps": 2, "nps_truncation": 25}
-calc_size(parms)

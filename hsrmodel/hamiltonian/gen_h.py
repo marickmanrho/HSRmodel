@@ -1,16 +1,15 @@
 def gen_h(parms):
     import numpy as np
 
-    from hamiltonian.calc_size import calc_size
-    from hamiltonian.index_h import index_h
+    #from hamiltonian.calc_size import calc_size
+    #from hamiltonian.index_h import index_h
+    from hamiltonian.Tenzin.H_and_Flux import H_and_Flux
 
-    print(calc_size(parms))
+    #print(calc_size(parms))
 
     # Index states
-    idx = index_h(parms)
+    #idx = index_h(parms)
 
-    # Gen hamiltonian
+    H, F = H_and_Flux(parms)
 
-    H = np.zeros((2,2))
-
-    return H
+    return(H,F)

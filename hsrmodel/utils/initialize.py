@@ -10,16 +10,17 @@ def initialize():
     # Python packages
     import sys
     import json
+    import numpy as np
 
     # Custom packages
-    from initialization.txt_to_dict import txt_to_dict
-    from initialization.init_folder import init_folder
+    from utils.txt_to_dict import txt_to_dict
+    from utils.init_folder import init_folder
 
     # Read parameters file
     try:
         parmsfile = sys.argv[1]
     except:
-        parmsfile = "initialization/default_parameters.txt"
+        parmsfile = "utils/default_parameters.txt"
     parms = txt_to_dict(parmsfile)
 
     # Setup Data/<name> folder

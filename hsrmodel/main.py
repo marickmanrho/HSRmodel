@@ -1,11 +1,14 @@
 def main():
-    from initialization.initialize import initialize
-    from hsrmodel import hsrmodel
+    from utils.initialize import initialize
+    from fluxoperator.fluxoperator import fluxoperator
 
     # Create Data folder and setup parameters for this build
     parms = initialize()
 
-    # Run HSR model
-    hsrmodel(parms)
+    # Determine which model to use
+    if parms['model'] == 'fluxoperator':
+        fluxoperator(parms)
+    else:
+        raise ImportError("Model \'%s\' does not yet excist." %parms['model'])
 
 main()

@@ -27,7 +27,7 @@ def get_hamiltonian(parms):
 
     # Or generate Hamiltonian from scratch
     except:
-        H = gen_h(parms)
+        H,F = gen_h(parms)
 
         # And write it to JSON
         if parms["save_hamiltonian"]:
@@ -39,4 +39,4 @@ def get_hamiltonian(parms):
                 json.dump(hamiltonian_dict, write_file, separators=(',', ':'),\
                  sort_keys=True, indent=4)
 
-    return H
+    return(H,F)
