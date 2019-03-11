@@ -1,18 +1,8 @@
-def CT_n_particle_HF(parms):
-    import numpy as np
-
-    N = parms['N']
-
-    # Index states
-    nparticle_count = calc_size(parms)
-    Nstates = np.int(np.sum(nparticle_count))
-    index_h(Nstates,parms)
-    # Build Hamiltonian
-
-def index_h(Nstates,parms):
+def index_h_frenkel(Nstates,parms):
     import numpy as np
     import itertools
 
+    # Import parameters
     N = parms['N']
     MaxVib = parms['MaxVib']
     incl_nps = parms['incl_nps']
@@ -26,8 +16,8 @@ def index_h(Nstates,parms):
     count = np.zeros(incl_nps,)
     kount = 0
 
-    idx = np.zeros((Nstates,incl_nps))
-    vib = np.zeros((Nstates,incl_nps))
+    f_idx = np.zeros((Nstates,incl_nps))
+    f_vib = np.zeros((Nstates,incl_nps))
 
     for nps in range(incl_nps):
 
@@ -78,45 +68,16 @@ def index_h(Nstates,parms):
                 # For all possible permutations of the extra vibrational quanta
                 for k in range(nr_vib_perms[0]):
                     # save location of each excitation
-                    idx[kount,:] = loc[:]
+                    f_idx[kount,:] = loc[:]
 
                     # save nr. of vibrations on each excitation
                     vib_temp = np.zeros((incl_nps,))-1
                     vib_temp[1:nps+1] = vib_perms[k,1:nps+1]+1
                     vib_temp[0] = vib_perms[k,0]
-                    vib[kount,:] = vib_temp
+                    f_vib[kount,:] = vib_temp
 
                     # Increase count
                     count[nps] = count[nps] + 1
                     kount = kount + 1
 
-def calc_size(parms):
-    import numpy as np
-
-    N = parms['N']
-    MaxVib = parms['MaxVib']
-    nps = parms['incl_nps']
-    nps_truncation = parms['nps_truncation']
-
-    size = np.zeros((nps,))
-    for n in range(nps):
-        q = max(0,MaxVib+1-n)
-        prefactor = N*factorial(2*nps_truncation)/factorial(2*nps_truncation-n)
-        for m in range(0,q):
-            size[n] = size[n] + prefactor*factorial(m+n)/(factorial(n)*factorial(m))
-
-    print(size)
-    return(size)
-
-# Simple function to calculate factorial
-def factorial(n):
-    f = 1
-    for i in range(1,n+1):
-        f = f*i
-
-    return f
-
-
-parms = {"N": 3, "MaxVib": 2, "incl_nps": 3, "nps_truncation": 1}
-
-CT_n_particle_HF(parms)
+    return(f_idx,f_vib,count)
