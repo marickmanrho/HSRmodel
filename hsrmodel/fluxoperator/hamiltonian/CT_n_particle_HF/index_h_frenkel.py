@@ -26,6 +26,7 @@ def index_h_frenkel(Nstates,parms):
         # -trun, - trun+1, .... , -1, 1, .... ,trun
         loc_string = np.linspace(-1,-nps_truncation,nps_truncation)
         loc_string = np.concatenate((loc_string,-loc_string),axis=0)
+        loc_string = np.unique(loc_string)
         # Create a list of all possible combinations of positions with length nps
         loc_perms = np.array(list(itertools.permutations(loc_string,nps)))
         # Determine how many permutations we end up with
