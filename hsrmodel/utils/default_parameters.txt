@@ -16,21 +16,22 @@ Name = 'Default_Test'
 
 # Which model to use
 model = 'fluxoperator'
-hamiltonian = 'frenkel'
+  # submodule
+  hamiltonian = 'frenkel'
 
 #------------------------------------------------------------------------------#
 #-----                             PRECISION                              -----#
 #------------------------------------------------------------------------------#
 
 # Number of samples
-Nsamples = 1000
+Nsamples = 1
 
 #------------------------------------------------------------------------------#
 #-----                          MOLECULAR SYSTEM                          -----#
 #------------------------------------------------------------------------------#
 
 # Number of molecules
-N = 100
+N = 2
 
 # Mean energy of Frenkel exciton and standard deviation (diagonal disorder)
 E = 0
