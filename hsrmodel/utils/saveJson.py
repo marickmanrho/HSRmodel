@@ -47,7 +47,7 @@ def save_eigen(w,v,path,type):
     jsonpath = path + '/' + type + '.json'
     data_dict = {}
     data_dict['type'] = type
-    
+
     wreal = np.real(w)
     wimag = np.imag(w)
 
@@ -59,6 +59,21 @@ def save_eigen(w,v,path,type):
 
     data_dict['v_real'] = vreal.tolist()
     data_dict['v_imag'] = vimag.tolist()
+
+    with open(jsonpath, "w") as write_file:
+        json.dump(data_dict, write_file, separators=(',', ':'),\
+         sort_keys=True, indent=4)
+
+def save_dict(data_dict,path,type):
+    import numpy as np
+    import json
+
+    # And write it to JSON
+    #if isinstance(data, np.ndarray):
+    #    raise TypeError('Data is not a Numpy.Array object')
+
+    jsonpath = path + '/' + type + '.json'
+    data_dict['type'] = type
 
     with open(jsonpath, "w") as write_file:
         json.dump(data_dict, write_file, separators=(',', ':'),\

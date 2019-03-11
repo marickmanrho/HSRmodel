@@ -18,28 +18,19 @@ Name = 'Default_Test'
 model = 'fluxoperator'
 hamiltonian = 'frenkel'
 
-# save generated Hamiltonian
-save_hamiltonian = True
-
 #------------------------------------------------------------------------------#
 #-----                             PRECISION                              -----#
 #------------------------------------------------------------------------------#
 
-# Include states
-incl_nps = 1
-
-# Maximum number of vibrations in the system
-MaxVib = 5
-
-# Truncation
-nps_truncation = 10
+# Number of samples
+Nsamples = 1000
 
 #------------------------------------------------------------------------------#
 #-----                          MOLECULAR SYSTEM                          -----#
 #------------------------------------------------------------------------------#
 
 # Number of molecules
-N = 3
+N = 100
 
 # Mean energy of Frenkel exciton and standard deviation (diagonal disorder)
 E = 0
@@ -50,12 +41,8 @@ J = [[0],[1]]
 
 # Gamma
 gamma = [[0],[0]]
-Gamma = 0
+Gamma = 0.79432
 
-#------------------------------------------------------------------------------#
-#-----                           TIME EVOLUTION                           -----#
-#------------------------------------------------------------------------------#
-
-# The size of one timestep, (dt) is calculated from maxtime/timestep
-maxtime = 4000
-timesteps = 40000
+Gamma_min = 0.79432
+Gamma_max = 0.79432
+Gamma_delta = 0.79432

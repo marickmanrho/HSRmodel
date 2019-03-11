@@ -26,7 +26,7 @@ def frenkel_HF(parms):
             if n==m:    # Diagonal
                 H[n,m] = H[n,m] + np.random.normal(E,Esig)
             else:       # Off-diagonal
-                H[n,m] = H[n,m] + J[nd]
+                H[n,m] = H[n,m] + -J[nd]
 
             # Flux operator
             F[n,m] = F[n,m] - 1j*d*H[n,m]

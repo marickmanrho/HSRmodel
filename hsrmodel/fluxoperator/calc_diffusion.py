@@ -14,8 +14,8 @@ def calc_diffusion(w,v,F,parms):
                             # error later on when calculating diffusion constant
 
     # rotate flux matrix using eigenvectors and take square of values
-    F = np.transpose(v)*F*v
-    F = F*np.conj(F)
+    F = np.dot(np.transpose(v),np.dot(F,v))
+    F = np.multiply(np.abs(F),np.abs(F))
 
     # Add Hagen-Strobl model
     D = 0
@@ -24,5 +24,5 @@ def calc_diffusion(w,v,F,parms):
             dE = w[n]-w[m]
             dEs = dE*np.conj(dE)
             D = D + (Gamma/(Gamma**2+np.real(dEs)))*np.real(F[n,m])/N
-            
+
     return(D)
