@@ -2,6 +2,8 @@ def index_h_frenkel(Nstates,parms):
     import numpy as np
     import itertools
 
+    from CT_n_particle_HF.bring_into_range import bring_into_range_vec
+
     # Import parameters
     N = parms['N']
     MaxVib = parms['MaxVib']
@@ -16,28 +18,17 @@ def index_h_frenkel(Nstates,parms):
     count = np.zeros(incl_nps,)
     kount = 0
 
-    f_idx = np.zeros((Nstates,incl_nps))
-    f_vib = np.zeros((Nstates,incl_nps))
+    f_idx = np.zeros((3+Nstates,incl_nps))
+    f_vib = np.zeros((3+Nstates,incl_nps))
 
     for nps in range(incl_nps):
-
-        # Find the permutations possible for a `nps` particle state.
-        # First list all possible positions with respect to a Frenkel
-        # -trun, - trun+1, .... , -1, 1, .... ,trun
-        loc_string = np.linspace(-1,-nps_truncation,nps_truncation)
-        loc_string = np.concatenate((loc_string,-loc_string),axis=0)
-        loc_string = np.unique(loc_string)
-        # Create a list of all possible combinations of positions with length nps
-        loc_perms = np.array(list(itertools.permutations(loc_string,nps)))
-        # Determine how many permutations we end up with
-        nr_perms = np.shape(loc_perms)
-
         # For all possible number of vibrations (which are left over to
         # distribute)
-        v = max(0,MaxVib-nps)
+        v = MaxVib-nps
 
         # We can have 0,1,2,3 .. v vibrations on a molecule
         vib_string = np.linspace(0,v,v+1)
+        vib_string = np.unique(vib_string)
         # Calculate all possible permutations of these with
         #   len = nps+1
         vib_perms = list(itertools.product(vib_string,repeat=nps+1))
@@ -50,6 +41,19 @@ def index_h_frenkel(Nstates,parms):
 
         # Determine the Frenkel position
         for n in range(N):
+            # Find the permutations possible for a `nps` particle state.
+            # First list all possible positions with respect to a Frenkel
+            # -trun, - trun+1, .... , -1, 1, .... ,trun
+            range_a = np.linspace(n-1,n-nps_truncation,nps_truncation)
+            range_b = np.linspace(n+1,n+nps_truncation,nps_truncation)
+            loc_string = np.concatenate((range_a,range_b),axis=0)
+            loc_string = bring_into_range_vec(N,loc_string)
+            loc_string = loc_string[np.all(loc_string != n)]
+            loc_string = np.unique(loc_string)
+            # Create a list of all possible combinations of positions with length nps
+            loc_perms = np.array(list(itertools.combinations(loc_string,nps)))
+            # Determine how many permutations we end up with
+            nr_perms = np.shape(loc_perms)
 
             # For all possible permutations of vibrational excited states
             # excluding the Frenkel
@@ -58,13 +62,7 @@ def index_h_frenkel(Nstates,parms):
                 loc[0] = n
                 # translate position of vibrational excited states to positions
                 # around the Frenkel exciton
-                loc[1:nps+1] = n+loc_perms[m,:]
-                for qq in range(nps):
-                    # Fix edges
-                    if loc[qq+1] >= N:
-                        loc[qq+1] = loc[qq+1]-N
-                    if loc[qq+1] < 0:
-                        loc[qq+1] = N + loc[qq+1]
+                loc[1:nps+1] = loc_perms[m,:]
 
                 # For all possible permutations of the extra vibrational quanta
                 for k in range(nr_vib_perms[0]):

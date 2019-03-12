@@ -1,7 +1,8 @@
 def index_h_ct(Nstates,parms):
     import numpy as np
-
     import itertools
+
+    from CT_n_particle_HF.bring_into_range import bring_into_range_vec
 
     # Import parameters
     N = parms['N']
@@ -19,8 +20,8 @@ def index_h_ct(Nstates,parms):
     count = np.zeros(incl_nps,)
     kount = 0
 
-    ct_idx = np.zeros((10*Nstates,incl_nps))
-    ct_vib = np.zeros((10*Nstates,incl_nps))
+    ct_idx = np.zeros((Nstates,incl_nps))
+    ct_vib = np.zeros((Nstates,incl_nps))
 
     for nps in range(incl_nps):
         if nps < 1:
@@ -58,7 +59,7 @@ def index_h_ct(Nstates,parms):
 
                 # Fix the edges
                 loc_string = bring_into_range_vec(N,loc_string)
-
+                
                 # Remove accidental electron and hole locations
                 loc_string = loc_string[(loc_string != loc_hole) & (loc_string != loc_electron)]
                 loc_string = np.unique(loc_string)
@@ -94,36 +95,11 @@ def index_h_ct(Nstates,parms):
                         # save nr. of vibrations on each excitation
                         vib_temp = np.zeros((incl_nps,))-1
                         vib_temp[2:nps+1] = vib_perms[q,2:nps+1]+1
-                        vib_temp[0:1] = vib_perms[q,0:1]
+                        vib_temp[0] = vib_perms[q,0]
+                        vib_temp[1] = vib_perms[q,1]
                         ct_vib[kount,:] = vib_temp
 
                         # increase counters
                         count[nps] = count[nps] + 1
                         kount = kount + 1
     return(ct_idx,ct_vib,count)
-
-def bring_into_range_arr(N,arr):
-    import numpy as np
-
-    a = np.shape(arr)
-
-    for n in range(a[0]):
-        for m in range(a[1]):
-            if arr[n,m] > N:
-                arr[n,m] = arr[n,m] - N
-            if arr[n,m] < 0:
-                arr[n,m] = arr[n,m] + N
-    return(arr)
-
-def bring_into_range_vec(N,vec):
-    import numpy as np
-
-    a = np.shape(vec)
-
-    for n in range(a[0]):
-        if vec[n] > N:
-            vec[n] = vec[n] - N
-        if vec[n] < 0:
-            vec[n] = vec[n] + N
-
-    return(vec)
