@@ -35,15 +35,15 @@ def CT_n_particle_HF(parms):
     print('calc:\t', nparticle_ct_count)
     print('gen:\t', ct_count)
 
-    print('----------')
-    np.set_printoptions(threshold=np.inf)
-    print('locs')
-    print(ct_idx[36:])
-    print('vibs')
-    print(ct_vibs[36:])
+    # print('----------')
+    # np.set_printoptions(threshold=np.inf)
+    # print('locs')
+    # print(ct_idx[36:])
+    # print('vibs')
+    # print(ct_vibs[36:])
 
     # Build Hamiltonian
 
 
-parms = {"N": 3, "MaxVib": 2, "incl_nps": 3, "nps_truncation": 1, "ct_truncation": 1}
+parms = {"N": 7, "MaxVib": 10, "incl_nps": 3, "nps_truncation": 1, "ct_truncation": 1}
 CT_n_particle_HF(parms)

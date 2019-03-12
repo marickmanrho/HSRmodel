@@ -37,7 +37,10 @@ def calc_size_ct(parms):
             size[n] = 0
         else:
             for s in range(ct_truncation):
-                q = min(s+2*nps_truncation,4*nps_truncation)
+                if s+2*nps_truncation+1 >= N:
+                    q = N-2
+                else:
+                    q = min(s+2*nps_truncation,4*nps_truncation)
 
                 p = n-1
 
