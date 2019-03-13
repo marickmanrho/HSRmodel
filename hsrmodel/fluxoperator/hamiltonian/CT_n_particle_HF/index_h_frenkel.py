@@ -15,7 +15,7 @@ def index_h_frenkel(Nstates,parms):
     # Distribute vibrations
 
     # For each number of vibrational particles (excluding Frenkel excitons)
-    count = np.zeros(incl_nps,)
+    count = np.zeros((incl_nps,),dtype=int)
     kount = 0
 
     f_idx = np.zeros((Nstates,incl_nps))

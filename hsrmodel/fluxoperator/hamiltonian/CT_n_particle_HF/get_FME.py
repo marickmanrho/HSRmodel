@@ -23,8 +23,7 @@ def get_FME(n_idx,n_vibs,m_idx,m_vibs,parms):
         h,f = get_FME_less(n_idx,n_vibs,m_idx,m_vibs,parms)
         return h,f
     elif ln[0] > lm[0]:
-        h = 0
-        f = 0
+        h,f = get_FME_less(m_idx,m_vibs,n_idx,n_vibs,parms)
         return h,f
     else:
         raise ValueError('n_idx and m_idx are not proper numpy vectors.')

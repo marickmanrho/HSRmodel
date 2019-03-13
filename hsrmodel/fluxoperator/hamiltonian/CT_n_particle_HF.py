@@ -10,7 +10,7 @@ def CT_n_particle_HF(parms):
     from CT_n_particle_HF.calc_size import calc_size_ct
     from CT_n_particle_HF.index_h_frenkel import index_h_frenkel
     from CT_n_particle_HF.index_h_ct import index_h_ct
-    from CT_n_particle_HF.gen_h import gen_h
+    from CT_n_particle_HF.gen_hamiltonian import gen_hamiltonian
 
     # Index states
     nparticle_count = calc_size_frenkel(parms)
@@ -51,11 +51,11 @@ def CT_n_particle_HF(parms):
     #save_dict(basis_dict,parms['PathToDataFolder'],'basis')
 
     # Build Hamiltonian
-    H,F = gen_h(f_count,f_idx,f_vibs,ct_count,ct_idx,ct_vibs,parms)
+    H,F = gen_hamiltonian(f_count,f_idx,f_vibs,ct_count,ct_idx,ct_vibs,parms)
     n1p = np.int(f_count[0])
     n2p = np.int(f_count[0]+f_count[1])
-    print(np.array2string(H[0:n1p,n1p:n2p], precision=3))
-    print(np.array2string(H[n1p:n2p,0:n1p], precision=3))
+    print(np.array2string(H, precision=2))
+    #print(np.array2string(H[n1p:n2p,n1p:n2p]))
 
-parms = {"N": 3, "MaxVib": 1, "incl_nps": 2, "nps_truncation": 1, "ct_truncation": 1, "E":0, "Esig":0.1, "wvib":1, "S":1, "J":[0,1,1,1]}
+parms = {"N": 3, "MaxVib": 1, "incl_nps": 2, "nps_truncation": 1, "ct_truncation": 1, "E":0, "Esig":0.1, "wvib":1, "S":1, "J":[0,1,0,0]}
 CT_n_particle_HF(parms)

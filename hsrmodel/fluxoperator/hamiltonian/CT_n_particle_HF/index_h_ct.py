@@ -17,7 +17,7 @@ def index_h_ct(Nstates,parms):
     # distribute remaining vibrations
 
     # For each number of vibrational particles (excluding Frenkel excitons)
-    count = np.zeros(incl_nps,)
+    count = np.zeros((incl_nps,),dtype=int)
     kount = 0
 
     ct_idx = np.zeros((Nstates,incl_nps))

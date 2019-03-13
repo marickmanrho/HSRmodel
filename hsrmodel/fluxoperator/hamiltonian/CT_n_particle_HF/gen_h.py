@@ -14,7 +14,7 @@ def gen_h(f_count,f_idx,f_vibs,ct_count,ct_idx,ct_vibs,parms):
     #   B'| C
 
     # init H
-    Nstates = np.int(np.sum(np.sum(f_count))+np.sum(np.sum(ct_count)))
+    Nstates = np.int(np.sum(np.sum(f_count)))#+np.sum(np.sum(ct_count)))
     H = np.zeros((Nstates,Nstates),dtype=complex)
     F = np.zeros((Nstates,Nstates),dtype=complex)
 
