@@ -17,8 +17,6 @@ def CT_n_particle_HF(parms):
     Nstates = np.int(np.sum(nparticle_count))
     f_idx,f_vibs,f_count = index_h_frenkel(Nstates,parms)
 
-    print(f_count)
-
     #Check if calculated and generated sizes agree
     if not (f_count==nparticle_count).all():
        print('Error:')
@@ -51,6 +49,9 @@ def CT_n_particle_HF(parms):
 
     # Build Hamiltonian
     H,F = gen_h(f_count,f_idx,f_vibs,ct_count,ct_idx,ct_vibs,parms)
-    print(H)
-parms = {"N": 2, "MaxVib": 1, "incl_nps": 1, "nps_truncation": 1, "ct_truncation": 1, "E":0, "Esig":0.1, "wvib":2}
+    n1p = np.int(f_count[0])
+    n2p = np.int(f_count[0]+f_count[1])
+    print(np.array2string(H[n1p:n2p,n1p:n2p], precision=2))
+
+parms = {"N": 3, "MaxVib": 1, "incl_nps": 2, "nps_truncation": 1, "ct_truncation": 1, "E":0, "Esig":0.1, "wvib":1, "S":1, "J":[0,1,0,0]}
 CT_n_particle_HF(parms)

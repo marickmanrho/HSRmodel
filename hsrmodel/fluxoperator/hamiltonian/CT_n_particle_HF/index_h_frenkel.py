@@ -18,8 +18,8 @@ def index_h_frenkel(Nstates,parms):
     count = np.zeros(incl_nps,)
     kount = 0
 
-    f_idx = np.zeros((3+Nstates,incl_nps))
-    f_vib = np.zeros((3+Nstates,incl_nps))
+    f_idx = np.zeros((Nstates,incl_nps))
+    f_vib = np.zeros((Nstates,incl_nps))
 
     for nps in range(incl_nps):
         # For all possible number of vibrations (which are left over to

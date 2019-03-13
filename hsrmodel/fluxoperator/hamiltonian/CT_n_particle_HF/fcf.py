@@ -1,8 +1,8 @@
 def fcf(n,m,S):
     import numpy as np
 
-    n = n
-    m = m
+    n = np.int(n)
+    m = np.int(m)
 
     fc = 0
     facn = factorial(n)

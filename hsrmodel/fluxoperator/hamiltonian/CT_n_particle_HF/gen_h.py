@@ -26,8 +26,8 @@ def gen_h(f_count,f_idx,f_vibs,ct_count,ct_idx,ct_vibs,parms):
             ran[n,0] = 0
             ran[n,1] = f_count[n]
         else:
-            ran[n,0] = f_count[n-1]
-            ran[n,1] = f_count[n]
+            ran[n,0] = ran[n-1,1]
+            ran[n,1] = ran[n-1,1] + f_count[n]
 
     for nps_a in range(incl_nps):
         # determine coupling range
@@ -43,7 +43,7 @@ def gen_h(f_count,f_idx,f_vibs,ct_count,ct_idx,ct_vibs,parms):
                     n_vibs = f_vibs[n,:]
                     m_vibs = f_vibs[m,:]
 
-                    H[n,m] = H[n,m] + get_matrix_element(n_idx,n_vibs,m_idx,m_vibs)
+                    H[n,m] = H[n,m] + get_matrix_element(n_idx,n_vibs,m_idx,m_vibs,parms)
                     # Diagonal
 
                     #if np.all(n_idx==m_idx) & np.all(n_vibs == m_vibs):
@@ -80,24 +80,6 @@ def get_matrix_element(n_idx,n_vibs,m_idx,m_vibs,parms):
         pass
     else:
         raise ValueError('n_idx and m_idx are not proper numpy vectors.')
-    # # First check if Frenkel in n is occupied in m
-    # if n_idx[0] != m_idx[0]:
-    #     if n_idx[0] in m_idx:
-    #         # Find where it matches
-    #         n_f_in_m = np.array(np.where(m_idx==n_idx[0]))
-    #
-    #     elif True:  # n_f falls outsize m, thus m_f must be in n
-    #         if m_idx[0] in n_idx:
-    #             m_f_in_n = np.array(np.where(m_idx[0]==n_idx))
-    #             # Also, all vibrations other then on n_f and m_f must be equal
-    #             n_idx_temp = np.delete(n_idx,[m_f_in_n],0)
-    #             m_idx_temp = np.delete(m_idx,[0],0)
-    #         else:
-    #             return False
-    #     else:
-    #         return False
-    # else:
-    #     return False
 
     return True # replace by matrix element
 
@@ -111,7 +93,8 @@ def find_distance(n,m,N):
     return d
 
 def get_matrix_element_equal(n_idx,n_vibs,m_idx,m_vibs,parms):
-    from fcf import fcf
+    import numpy as np
+    from CT_n_particle_HF.fcf import fcf
     # Import parameters
     N = parms['N']
     incl_nps = parms['incl_nps']
@@ -131,7 +114,7 @@ def get_matrix_element_equal(n_idx,n_vibs,m_idx,m_vibs,parms):
     # Frenkel must have moved, or the states must be the same
     # Check the latter
     if np.all(n_idx==m_idx) & np.all(n_vibs == m_vibs):
-        h = np.random.normal(E,Esig) + np.sum(m_vibs[:])*wvib
+        h = np.random.normal(E,Esig) + np.sum(m_vibs)*wvib
     else: # Check the former
         # Two options:
         #   - Frenkel took all of its vibrations and moved to a new molecule
@@ -147,8 +130,8 @@ def get_matrix_element_equal(n_idx,n_vibs,m_idx,m_vibs,parms):
             m_vib_temp = m_vibs[1:]
 
             if (np.all(n_idx_temp==m_idx_temp) & np.all(n_vib_temp==m_vib_temp)):
-                d = find_distance(n_idx[0,0],m_idx[0,0],N)
-                h = fcf(0,n_vibs[0,0],S)*fcf(0,m_vibs[0,0],S)*J[d,0]
+                d = np.int(find_distance(n_idx[0],m_idx[0],N))
+                h = fcf(0,np.int(n_vibs[0]),S)*fcf(0,np.int(m_vibs[0]),S)*J[d]
 
         # Asses second option:
         if ((n_idx[0] in m_idx) & (m_idx[0] in n_idx)):
@@ -156,18 +139,18 @@ def get_matrix_element_equal(n_idx,n_vibs,m_idx,m_vibs,parms):
             fn_in_m = np.array(np.where(m_idx==n_idx[0]))
             fm_in_n = np.array(np.where(n_idx==m_idx[0]))
 
-            d = find_distance(n_idx[0,0],m_idx[0,0],N)
-            h = fcf(m_vibs[fn_in_m,0],n_vibs[0,0])*fcf(n_vibs[fm_in_n,0],m_vibs[0,0])*J[d,0]
+            d = np.int(find_distance(n_idx[0],m_idx[0],N))
+
+            h = fcf(m_vibs[fn_in_m[0,0]],np.int(n_vibs[0]),S)*fcf(n_vibs[fm_in_n[0,0]],np.int(m_vibs[0]),S)*J[d]
 
     return h # return default h=0
 
-import numpy as np
-n_idx = np.array([[0],[2],[1]])
-n_vibs = np.array([[2],[1],[0]])
-
-m_idx = np.array([[3],[2],[1]])
-m_vibs = np.array([[0],[1],[0]])
-
-parms = {"N": 4, "MaxVib": 1, "incl_nps": 1, "nps_truncation": 1, "ct_truncation": 1, "E":0, "Esig":0.1, "wvib":2, "S":1, "J":[[0],[1],[2],[3]]}
-
-print(get_matrix_element(n_idx,n_vibs,m_idx,m_vibs,parms))
+# import numpy as np
+# n_idx = [0,1,2]
+# n_vibs = [0,1,1]
+# m_idx = [3,1,2]
+# m_vibs = [0,1,1]
+#
+# parms = {"N": 4, "MaxVib": 1, "incl_nps": 2, "nps_truncation": 1, "ct_truncation": 1, "E":0, "Esig":0.1, "wvib":1, "S":1, "J":[0,1,0,0]}
+#
+# print(get_matrix_element(n_idx,n_vibs,m_idx,m_vibs,parms))
