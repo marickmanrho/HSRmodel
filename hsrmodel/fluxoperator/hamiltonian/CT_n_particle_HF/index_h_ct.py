@@ -59,7 +59,7 @@ def index_h_ct(Nstates,parms):
 
                 # Fix the edges
                 loc_string = bring_into_range_vec(N,loc_string)
-                
+
                 # Remove accidental electron and hole locations
                 loc_string = loc_string[(loc_string != loc_hole) & (loc_string != loc_electron)]
                 loc_string = np.unique(loc_string)
@@ -93,7 +93,7 @@ def index_h_ct(Nstates,parms):
                         ct_idx[kount,:] = loc_temp
 
                         # save nr. of vibrations on each excitation
-                        vib_temp = np.zeros((incl_nps,))-1
+                        vib_temp = np.zeros((incl_nps,))
                         vib_temp[2:nps+1] = vib_perms[q,2:nps+1]+1
                         vib_temp[0] = vib_perms[q,0]
                         vib_temp[1] = vib_perms[q,1]

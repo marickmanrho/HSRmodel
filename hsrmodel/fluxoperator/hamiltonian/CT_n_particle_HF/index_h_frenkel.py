@@ -69,8 +69,8 @@ def index_h_frenkel(Nstates,parms):
                     # save location of each excitation
                     f_idx[kount,:] = loc[:]
 
-                    # save nr. of vibrations on each excitation
-                    vib_temp = np.zeros((incl_nps,))-1
+                    # save nr. of vibrations on each molecule
+                    vib_temp = np.zeros((incl_nps,))
                     vib_temp[1:nps+1] = vib_perms[k,1:nps+1]+1
                     vib_temp[0] = vib_perms[k,0]
                     f_vib[kount,:] = vib_temp
