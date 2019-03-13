@@ -35,6 +35,9 @@ def CT_n_particle_HF(parms):
        print('Actual size:\t %s' %np.array2string(ct_count))
        raise AssertionError('calc_size and index_h_ct produce different counts.')
 
+    # print number of states
+    print('Nr Frenkel states:\t', f_count)
+    print('Nr CT states:\t\t',ct_count)
     # Save site basis
     #basis_dict = {}
     #basis_dict['f_count'] = f_count
@@ -51,7 +54,8 @@ def CT_n_particle_HF(parms):
     H,F = gen_h(f_count,f_idx,f_vibs,ct_count,ct_idx,ct_vibs,parms)
     n1p = np.int(f_count[0])
     n2p = np.int(f_count[0]+f_count[1])
-    print(np.array2string(H[n1p:n2p,n1p:n2p], precision=2))
+    print(np.array2string(H[0:n1p,n1p:n2p], precision=3))
+    print(np.array2string(H[n1p:n2p,0:n1p], precision=3))
 
-parms = {"N": 3, "MaxVib": 1, "incl_nps": 2, "nps_truncation": 1, "ct_truncation": 1, "E":0, "Esig":0.1, "wvib":1, "S":1, "J":[0,1,0,0]}
+parms = {"N": 3, "MaxVib": 1, "incl_nps": 2, "nps_truncation": 1, "ct_truncation": 1, "E":0, "Esig":0.1, "wvib":1, "S":1, "J":[0,1,1,1]}
 CT_n_particle_HF(parms)
