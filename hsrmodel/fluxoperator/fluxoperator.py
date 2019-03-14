@@ -9,6 +9,8 @@ def fluxoperator(parms):
     from utils.loadJson import input_c_np_array, input_eigen
     from utils.saveJson import save_dict
     from fluxoperator.hamiltonian.frenkel_HF import frenkel_HF
+    from fluxoperator.hamiltonian.np_frenkel_ct_wrapper import np_frenkel_ct
+
     from fluxoperator.solve_H import solve_H
     from fluxoperator.calc_diffusion import calc_diffusion
 
@@ -43,25 +45,28 @@ def fluxoperator(parms):
             if parms['hamiltonian'] == 'frenkel':
                 H,F = frenkel_HF(parms)
                 w,v = solve_H(H,parms)
+            elif parms['hamiltonian'] == 'np_frenkel_ct':
+                H,F = np_frenkel_ct(parms)
+                w,v = solve_H(H,parms)
             else:
                 raise ImportError("Hamiltonian type: \'%s\' does not yet excist." %parms['hamiltonian'])
 
-        # Calculate diffusion
-        try:
-            # Initialize D
-            D = np.zeros((n_Gamma_points,))
-
-            # Loop over all Gamma and calculate the Diffusion constant
-            for n in range(n_Gamma_points):
-                parms["Gamma"] = Gamma[n,]
-                D[n] = calc_diffusion(w,v,F,parms)
-        except:
-            D = calc_diffusion(w,v,F,parms)
-
-        Diff = Diff + D
-
-    Diff = Diff/Nsamples
-    Diff_dict = {}
-    Diff_dict['diffusion'] = Diff.tolist()
-    Diff_dict['gamma'] = Gamma.tolist()
-    save_dict(Diff_dict,parms['PathDataFolder'],'diffusion')
+    #     # Calculate diffusion
+    #     try:
+    #         # Initialize D
+    #         D = np.zeros((n_Gamma_points,))
+    #
+    #         # Loop over all Gamma and calculate the Diffusion constant
+    #         for n in range(n_Gamma_points):
+    #             parms["Gamma"] = Gamma[n,]
+    #             D[n] = calc_diffusion(w,v,F,parms)
+    #     except:
+    #         D = calc_diffusion(w,v,F,parms)
+    #
+    #     Diff = Diff + D
+    #
+    # Diff = Diff/Nsamples
+    # Diff_dict = {}
+    # Diff_dict['diffusion'] = Diff.tolist()
+    # Diff_dict['gamma'] = Gamma.tolist()
+    # save_dict(Diff_dict,parms['PathDataFolder'],'diffusion')

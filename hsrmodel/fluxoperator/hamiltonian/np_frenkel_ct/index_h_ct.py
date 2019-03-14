@@ -2,7 +2,7 @@ def index_h_ct(Nstates,parms):
     import numpy as np
     import itertools
 
-    from CT_n_particle_HF.bring_into_range import bring_into_range_vec
+    from fluxoperator.hamiltonian.np_frenkel_ct.bring_into_range import bring_into_range_vec
 
     # Import parameters
     N = parms['N']

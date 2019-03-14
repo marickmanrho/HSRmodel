@@ -1,6 +1,6 @@
 def gen_hamiltonian(f_count,f_idx,f_vibs,ct_count,ct_idx,ct_vibs,parms):
     import numpy as np
-    from CT_n_particle_HF.fcf import fcf
+    from fluxoperator.hamiltonian.np_frenkel_ct.fcf import fcf
 
     # Import parameters
     incl_nps = parms['incl_nps']
@@ -82,7 +82,7 @@ def gen_hamiltonian(f_count,f_idx,f_vibs,ct_count,ct_idx,ct_vibs,parms):
                             dabs,d = find_distance(f_idx[a,0],f_idx[b,0],N)
                             H[a,b] = H[a,b] + fcf(0,f_vibs[a,0],S)*fcf(0,f_vibs[b,0],S)*J[dabs]
                             F[a,b] = -1j*H[a,b]*d
-    
+
     return H,F
 
 def find_distance(n,m,N):

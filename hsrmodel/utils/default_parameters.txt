@@ -16,8 +16,8 @@ Name = 'Default_Test'
 
 # Which model to use
 model = 'fluxoperator'
-  # submodule
-  hamiltonian = 'frenkel'
+  # submodule (frenkel, np_frenkel_ct)
+  hamiltonian = 'np_frenkel_ct'
 
 #------------------------------------------------------------------------------#
 #-----                             PRECISION                              -----#
@@ -26,22 +26,32 @@ model = 'fluxoperator'
 # Number of samples
 Nsamples = 1
 
+# Go up to n-particle states
+incl_nps = 2
+
+# Truncation of vibrations
+nps_truncation = 1
+
 #------------------------------------------------------------------------------#
 #-----                          MOLECULAR SYSTEM                          -----#
 #------------------------------------------------------------------------------#
 
 # Number of molecules
-N = 2
+N = 3
 
 # Mean energy of Frenkel exciton and standard deviation (diagonal disorder)
 E = 0
 Esig = 0.1
 
+# Vibrational paramters
+wvib = 1
+MaxVib = 2
+
 # Coulomb coupling
-J = [[0],[1]]
+J = [0,1]
 
 # Gamma
-gamma = [[0],[0]]
+gamma = [0,0]
 Gamma = 0.79432
 
 Gamma_min = 0.79432

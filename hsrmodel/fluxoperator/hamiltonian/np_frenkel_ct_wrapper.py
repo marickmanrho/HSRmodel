@@ -4,13 +4,13 @@
 #   This function serves as a wrapper for the n-particle Hamiltonian builder
 #   including CT states. It outputs the Hamiltonian and Flux matrix
 
-def CT_n_particle_HF(parms):
+def np_frenkel_ct(parms):
     import numpy as np
-    from CT_n_particle_HF.calc_size import calc_size_frenkel
-    from CT_n_particle_HF.calc_size import calc_size_ct
-    from CT_n_particle_HF.index_h_frenkel import index_h_frenkel
-    from CT_n_particle_HF.index_h_ct import index_h_ct
-    from CT_n_particle_HF.gen_hamiltonian import gen_hamiltonian
+    from fluxoperator.hamiltonian.np_frenkel_ct.calc_size import calc_size_frenkel
+    from fluxoperator.hamiltonian.np_frenkel_ct.index_h_frenkel import index_h_frenkel
+    from fluxoperator.hamiltonian.np_frenkel_ct.calc_size import calc_size_ct
+    from fluxoperator.hamiltonian.np_frenkel_ct.index_h_ct import index_h_ct
+    from fluxoperator.hamiltonian.np_frenkel_ct.gen_hamiltonian import gen_hamiltonian
 
     # Index states
     nparticle_count = calc_size_frenkel(parms)
@@ -57,5 +57,5 @@ def CT_n_particle_HF(parms):
     print(np.array2string(H, precision=2))
     #print(np.array2string(H[n1p:n2p,n1p:n2p]))
 
-parms = {"N": 3, "MaxVib": 1, "incl_nps": 2, "nps_truncation": 1, "ct_truncation": 1, "E":0, "Esig":0.1, "wvib":1, "S":1, "J":[0,1,0,0]}
-CT_n_particle_HF(parms)
+# parms = {"N": 3, "MaxVib": 1, "incl_nps": 2, "nps_truncation": 1, "ct_truncation": 1, "E":0, "Esig":0.1, "wvib":1, "S":1, "J":[0,1,0,0]}
+# CT_n_particle_HF(parms)

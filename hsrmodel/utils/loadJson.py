@@ -1,8 +1,13 @@
 # functions for importing Json files
 
 def input_c_np_array(type,parms):
+    import codecs
+    import sys
+    import json
     # Itterate over all possible input files
-    for n in range(1,3):
+    a = len(sys.argv)
+    H = False
+    for n in range(1,a):
         fileinput = sys.argv[n]
 
         # See if it is a JSON
@@ -22,8 +27,12 @@ def input_c_np_array(type,parms):
     return(H)
 
 def input_eigen(type,parms):
+    import codecs
+    import json
+    import sys
     # Itterate over all possible input files
-    for n in range(1,3):
+    a = len(sys.argv)
+    for n in range(1,a):
         fileinput = sys.argv[n]
 
         # See if it is a JSON

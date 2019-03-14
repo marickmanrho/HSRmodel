@@ -1,6 +1,6 @@
 def gen_h(f_count,f_idx,f_vibs,ct_count,ct_idx,ct_vibs,parms):
     import numpy as np
-    from CT_n_particle_HF.get_FME import get_FME
+    from fluxoperator.hamiltonian.np_frenkel_ct.get_FME import get_FME
 
     # Import parameters
     N = parms['N']

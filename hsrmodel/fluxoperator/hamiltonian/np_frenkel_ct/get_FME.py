@@ -32,7 +32,7 @@ def get_FME(n_idx,n_vibs,m_idx,m_vibs,parms):
 
 def get_FME_equal(n_idx,n_vibs,m_idx,m_vibs,parms):
     import numpy as np
-    from CT_n_particle_HF.fcf import fcf
+    from fluxoperator.hamiltonian.np_frenkel_ct.fcf import fcf
     # Import parameters
     N = parms['N']
     incl_nps = parms['incl_nps']
